@@ -1,4 +1,46 @@
 Attribute VB_Name = "TESTING"
+'      %                 Integer
+'      &                 Long
+'      !                 Single
+'      #                 Double
+'      $                 String
+'      @                 Currency
+Sub TestDir()
+    Dim sPath As String
+    Dim Ops As New UsefulOperations
+    
+    sPath = "C:\temp\dirTest"
+    
+    Ops.TestDirMakeDir sPath
+
+
+End Sub
+
+
+
+Sub Analyize()
+
+    Dim oRateReset As New MyRateReset
+    
+    oRateReset.EndingAnalysis
+
+End Sub
+
+
+
+Sub CopySheet()
+
+    
+    
+    Dim oUsefulOps As New UsefulOperations
+    oUsefulOps.CopySheet
+
+
+End Sub
+
+
+
+
 
 Sub lereta()
 '
@@ -166,7 +208,7 @@ Sub SheetSelector()
     Const HeightRowz As Long = 18
     Const SheetID As String = "__SheetSelection"
  
-    Dim i%, TopPos%, iSet%, optCols%, intLetters%, optMaxChars%, optLeft%
+    Dim i%, TopPos%, iSet%, optCols%, intLetters%, optMaxChars%, optLeft%   'integers
     Dim wsDlg As DialogSheet, objOpt As OptionButton, optCaption$, objSheet As Object
         optCaption = "": i = 0
  
@@ -255,3 +297,79 @@ Sub ProgBarTest()
     ProgressBar.Show
 
 End Sub
+
+
+
+
+
+
+
+
+
+Sub Macro1()
+'
+' power query join tables
+'
+
+'
+    ActiveWorkbook.Queries.Add Name:="Table6", Formula:= _
+        "let" & Chr(13) & "" & Chr(10) & "    Source = Excel.CurrentWorkbook(){[Name=""Table6""]}[Content]," & Chr(13) & "" & Chr(10) & "    #""Changed Type"" = Table.TransformColumnTypes(Source,{{""SSN"", Int64.Type}, {""First_Name"", type text}, {""Last_Name"", type text}, {""Score_1"", Int64.Type}})" & Chr(13) & "" & Chr(10) & "in" & Chr(13) & "" & Chr(10) & "    #""Changed Type"""
+    Sheets.Add After:=ActiveSheet
+    With ActiveSheet.ListObjects.Add(SourceType:=0, Source:= _
+        "OLEDB;Provider=Microsoft.Mashup.OleDb.1;Data Source=$Workbook$;Location=Table6;Extended Properties=""""" _
+        , Destination:=Range("$A$1")).QueryTable
+        .CommandType = xlCmdSql
+        .CommandText = Array("SELECT * FROM [Table6]")
+        .RowNumbers = False
+        .FillAdjacentFormulas = False
+        .PreserveFormatting = True
+        .RefreshOnFileOpen = False
+        .BackgroundQuery = True
+        .RefreshStyle = xlInsertDeleteCells
+        .SavePassword = False
+        .SaveData = True
+        .AdjustColumnWidth = True
+        .RefreshPeriod = 0
+        .PreserveColumnInfo = True
+        .ListObject.DisplayName = "Table6_2"
+        .Refresh BackgroundQuery:=False
+    End With
+    Selection.ListObject.QueryTable.Refresh BackgroundQuery:=False
+    Range("Table6_2[[#Headers],[First_Name]]").Select
+    Sheets("Data").Select
+    Range("B8").Select
+    Application.CutCopyMode = False
+    ActiveSheet.ListObjects.Add(xlSrcRange, Range("$A$1:$AB$132"), , xlYes).Name = _
+        "Table8"
+    Range("Table8[#All]").Select
+    ActiveWorkbook.Queries.Add Name:="myData", Formula:= _
+        "let" & Chr(13) & "" & Chr(10) & "    Source = Excel.CurrentWorkbook(){[Name=""Table8""]}[Content]," & Chr(13) & "" & Chr(10) & "    #""Changed Type"" = Table.TransformColumnTypes(Source,{{""OfferEnds"", type datetime}, {""Auth1"", type any}, {""BorrowerFirstName"", type text}, {""BorrowerMiddleName"", type text}, {""BorrowerLastName"", type text}, {""CoBorrowerFirstname"", type text}, {""CoBorrowerMiddleName"", type text" & _
+        "}, {""CoBorrowerLastName"", type text}, {""LoanNumber"", Int64.Type}, {""Email Address"", type text}, {""RemainingLoanTerm"", type any}, {""LoanExtensionMin"", Int64.Type}, {""LoanExtensionMax"", Int64.Type}, {""LoanYear"", Int64.Type}, {""LoanType"", type text}, {""Loan"", type text}, {""DateofNote"", type datetime}, {""CurrentPrincipalBalance"", type number}, {""C" & _
+        "urrentIntRate"", type number}, {""CurrentPIPayment "", type number}, {""NextDueDate"", type datetime}, {""Frequency"", type text}, {""OriginalLoanAmount"", type number}, {""Original Term in Months"", Int64.Type}, {""Tax Id (Numeric)"", Int64.Type}, {""Date of Birth"", Int64.Type}, {""Prod Dt"", type datetime}, {""Score_1"", type any}})" & Chr(13) & "" & Chr(10) & "in" & Chr(13) & "" & Chr(10) & "    #""Changed Type"""
+    Sheets.Add After:=ActiveSheet
+    With ActiveSheet.ListObjects.Add(SourceType:=0, Source:= _
+        "OLEDB;Provider=Microsoft.Mashup.OleDb.1;Data Source=$Workbook$;Location=myData;Extended Properties=""""" _
+        , Destination:=Range("$A$1")).QueryTable
+        .CommandType = xlCmdSql
+        .CommandText = Array("SELECT * FROM [myData]")
+        .RowNumbers = False
+        .FillAdjacentFormulas = False
+        .PreserveFormatting = True
+        .RefreshOnFileOpen = False
+        .BackgroundQuery = True
+        .RefreshStyle = xlInsertDeleteCells
+        .SavePassword = False
+        .SaveData = True
+        .AdjustColumnWidth = True
+        .RefreshPeriod = 0
+        .PreserveColumnInfo = True
+        .ListObject.DisplayName = "myData"
+        .Refresh BackgroundQuery:=False
+    End With
+    Selection.ListObject.QueryTable.Refresh BackgroundQuery:=False
+    Range("myData[[#Headers],[OfferEnds]]").Select
+End Sub
+
+
+
+

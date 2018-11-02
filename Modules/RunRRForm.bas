@@ -3,7 +3,7 @@ Attribute VB_Name = "RunRRForm"
 Sub RunRRForm()
     On Error GoTo eh
     
-    Application.ScreenUpdating = True
+    Application.ScreenUpdating = False
     Application.EnableEvents = True
     Application.Calculation = xlCalculationAutomatic
     RateResetForm.Show
@@ -15,6 +15,6 @@ CleanUp:
     Application.EnableEvents = True
 Exit Sub
 eh:
-    MsgBox Err.Source & ": The following error occured  " & Err.Description
+    MsgBox Err.Source & ": The following error occured in RunRRForm()  " & Err.Description
     GoTo CleanUp
 End Sub

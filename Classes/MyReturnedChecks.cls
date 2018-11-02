@@ -21,10 +21,12 @@ Attribute VB_Exposed = False
 
 'initialize new logger
 Dim oLogger As New MyLogger
+Private bLog As Boolean
 
 Private Sub Class_Initialize()
+    bLog = True
     oLogger.logFileName = "C:\temp\VB_Logger\ReturnedChecksLog.txt"
-    oLogger.Logger "TITLE", "BEGINNING RETURNED CHECKS: ", "LOGGING TIME, TYPE, SOURCE, AND DETAILS" & vbNewLine
+    oLogger.Logger bLog, "TITLE", "BEGINNING RETURNED CHECKS: ", "LOGGING TIME, TYPE, SOURCE, AND DETAILS" & vbNewLine
 End Sub
 
 Private Sub ResetFilters()
@@ -38,10 +40,10 @@ Public Sub Resize()
     Cells.EntireColumn.AutoFit
     Range("A1").Select
 Done:
-    oLogger.Logger "Done", "Resize()", "Subroutine finished"
+    oLogger.Logger bLog, "Done", "Resize()", "Subroutine finished"
     Exit Sub
 eh:
-    oLogger.Logger "Error", "Resize()", "The following error occured: " & Err.Description
+    oLogger.Logger bLog, "Error", "Resize()", "The following error occured: " & Err.Description
     MsgBox Err.Source & ": The following error occured in Resize(): " & Err.Description
 End Sub
 
@@ -52,10 +54,10 @@ Public Sub Formatting()
     Range("F:H, J:J").NumberFormat = "$#,##0.00_);[Red]($#,##0.00)"
     Range("I:I").NumberFormat = "$#,##0_);[Red]($#,##0)"
 Done:
-    oLogger.Logger "Done", "Formatting()", "Subroutine finished"
+    oLogger.Logger bLog, "Done", "Formatting()", "Subroutine finished"
     Exit Sub
 eh:
-    oLogger.Logger "Error", "Formatting()", "The following error occured: " & Err.Description
+    oLogger.Logger bLog, "Error", "Formatting()", "The following error occured: " & Err.Description
     MsgBox Err.Source & ": The following error occured in Formatting(): " & Err.Description
 End Sub
 
@@ -74,10 +76,10 @@ Public Sub RetReasonReplace()
         End If
     Next cell
 Done:
-    oLogger.Logger "Done", "RetReasonReplace()", "Subroutine finished"
+    oLogger.Logger bLog, "Done", "RetReasonReplace()", "Subroutine finished"
     Exit Sub
 eh:
-    oLogger.Logger "Error", "RetReasonReplace()", "The following error occured: " & Err.Description
+    oLogger.Logger bLog, "Error", "RetReasonReplace()", "The following error occured: " & Err.Description
     MsgBox Err.Source & ": The following error occured in RetReasonReplace(): " & Err.Description
 End Sub
 
@@ -109,6 +111,8 @@ Private Function CaseSwitch(ByRef cd As String)
               result = "Altered/Fictitious Check"
           Case "Q"
               result = "Duplicate Check"
+          Case "R03"
+              result = "No Account/Unable to locate account/Account Name Mismatch"
           Case "R10"
               result = "Customer Advises Not Authorized-Item is Ineligible-Notice Not Provided-Signatures-Not Genuine or Item Altered-Approved 10-9-2001"
           Case "U"
@@ -118,7 +122,7 @@ Private Function CaseSwitch(ByRef cd As String)
 Done:
     Exit Function
 eh:
-    oLogger.Logger "Error", "CaseSwitch()", "The following error occured: " & Err.Description
+    oLogger.Logger bLog, "Error", "CaseSwitch()", "The following error occured: " & Err.Description
     MsgBox Err.Source & ": The following error occured in CaseSwitch(): " & Err.Description
 End Function
 
@@ -133,10 +137,10 @@ Public Sub TurnFeePositive()
         feeCell.Value = 35
     Next feeCell
 Done:
-    oLogger.Logger "Done", "TurnFeePositive()", "Subroutine finished"
+    oLogger.Logger bLog, "Done", "TurnFeePositive()", "Subroutine finished"
     Exit Sub
 eh:
-    oLogger.Logger "Error", "TurnFeePositive()", "The following error occured: " & Err.Description
+    oLogger.Logger bLog, "Error", "TurnFeePositive()", "The following error occured: " & Err.Description
     MsgBox Err.Source & ": The following error occured in TurnFeePositive(): " & Err.Description
 End Sub
 
@@ -171,10 +175,10 @@ Public Sub MaskAccountNumbers()
         maskX = ""
     Next acctCell
 Done:
-    oLogger.Logger "Done", "MaskAccountNumbers()", "Subroutine finished"
+    oLogger.Logger bLog, "Done", "MaskAccountNumbers()", "Subroutine finished"
     Exit Sub
 eh:
-    oLogger.Logger "Error", "MaskAccountNumbers()", "The following error occured: " & Err.Description
+    oLogger.Logger bLog, "Error", "MaskAccountNumbers()", "The following error occured: " & Err.Description
     MsgBox Err.Source & ": The following error occured in MaskAccountNumbers(): " & Err.Description
 End Sub
 
@@ -186,18 +190,21 @@ Public Sub SaveFile()
     
     answer = MsgBox("Do you want to save this file?", vbYesNo + vbQuestion, "Save File")
     If answer = vbYes Then
+    
+        'TODO: check if directory exists, if not, create one
+    
         ActiveWorkbook.SaveAs fileName:= _
         saveFileName, FileFormat:=xlCSV, CreateBackup:=False
         MsgBox "File saved to: " + saveFileName, vbOKOnly, "Save Successful"
-        oLogger.Logger "FileSaved", "SaveFile()", "File successfully saved"
+        oLogger.Logger bLog, "FileSaved", "SaveFile()", "File successfully saved"
     Else
-        oLogger.Logger "FileNotSaved", "SaveFile()", "File was not saved"
+        oLogger.Logger bLog, "FileNotSaved", "SaveFile()", "File was not saved"
     End If
 Done:
-    oLogger.Logger "Done", "SaveFile()", "Subroutine finished"
+    oLogger.Logger bLog, "Done", "SaveFile()", "Subroutine finished"
     Exit Sub
 eh:
-    oLogger.Logger "Error", "SaveFile()", "The following error occured: " & Err.Description
+    oLogger.Logger bLog, "Error", "SaveFile()", "The following error occured: " & Err.Description
     MsgBox Err.Source & ": The following error occured trying to SaveFile(): " & Err.Description
 End Sub
 
@@ -225,10 +232,10 @@ Private Function GetSaveFileName() As String
     
     GetSaveFileName = fileName
 Done:
-    oLogger.Logger "Done", "GetSaveFileName()", "Subroutine finished"
+    oLogger.Logger bLog, "Done", "GetSaveFileName()", "Subroutine finished"
     Exit Function
 eh:
-    oLogger.Logger "Error", "GetSaveFileName()", "The following error occured: " & Err.Description
+    oLogger.Logger bLog, "Error", "GetSaveFileName()", "The following error occured: " & Err.Description
     MsgBox Err.Source & ": The following error occured in GetSaveFileName(): " & Err.Description
 End Function
 
@@ -259,10 +266,10 @@ Public Sub FilterAndDelete()
     Range("A1").Select
     Selection.AutoFilter
 Done:
-    oLogger.Logger "Done", "FilterAndDelete()", "Subroutine finished"
+    oLogger.Logger bLog, "Done", "FilterAndDelete()", "Subroutine finished"
     Exit Sub
 eh:
-    oLogger.Logger "Error", "FilterAndDelete()", "The following error occured: " & Err.Description
+    oLogger.Logger bLog, "Error", "FilterAndDelete()", "The following error occured: " & Err.Description
     MsgBox Err.Source & ": The following error occured in FilterAndDelete():  " & Err.Description
 End Sub
 

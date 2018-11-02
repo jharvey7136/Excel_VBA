@@ -25,10 +25,10 @@ Private Sub Class_Initialize()
 End Sub
 
 ' public facing sub to do the logging - writes to a txt file
-Public Sub Logger(sType As String, sSource As String, sDetails As String)
+Public Sub Logger(bOnOff As Boolean, sType As String, sSource As String, sDetails As String)
     On Error GoTo openFileError
-
-    'sFilename = "C:\temp\VB_Logger\MyLogger.txt"
+    
+    If Not bOnOff Then Exit Sub
     
     ' open file to write
     Dim txtFile As String
@@ -77,15 +77,15 @@ End Function
 
 ' terminates the logging class
 Private Sub Class_Terminate()
-    Dim myPath As String
-    Dim folderPath As String
-
-    folderPath = Application.ActiveWorkbook.Path
-    myPath = Application.ActiveWorkbook.FullName
-    
-    Logger "FolderPath", "ActiveWorkbook", folderPath
-    Logger "FilePath", "ActiveWorkbookName", myPath
-    Logger "MyLogger", "Class_Terminate()", "Class Module MyLogger has been terminated." & vbNewLine & vbNewLine
+'    Dim myPath As String
+'    Dim folderPath As String
+'
+'    folderPath = Application.ActiveWorkbook.Path
+'    myPath = Application.ActiveWorkbook.FullName
+'
+'    Logger "FolderPath", "ActiveWorkbook", folderPath
+'    Logger "FilePath", "ActiveWorkbookName", myPath
+'    Logger "MyLogger", "Class_Terminate()", "Class Module MyLogger has been terminated." & vbNewLine & vbNewLine
 End Sub
 
 

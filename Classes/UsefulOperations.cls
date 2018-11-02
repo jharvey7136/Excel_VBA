@@ -7,6 +7,18 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+'--------------------- Test if directory exists, create it if it doesnt -----------------------
+
+Sub TestDirMakeDir(sDirName As String)
+    If Len(Dir(sDirName, vbDirectory)) = 0 Then
+        MkDir sDirName
+    End If
+End Sub
+
+
+
+
+
 '--------------------- Boost Macro Speed -----------------------
 Sub YourSub()
     On Error GoTo eh
@@ -96,3 +108,30 @@ Sub ResetFilters()
     ActiveSheet.ShowAllData
 
 End Sub
+
+
+Sub CopySheet()
+    On Error GoTo eh
+    
+    'Dim mWB As Workbook 'master workbook
+    'Dim mWS As Worksheet 'master worksheet
+    'Set mWB = Application.ActiveWorkbook
+    'Set mWS = mWB.ActiveSheet
+    
+    Cells.Select
+    Cells.Copy
+    Sheets.Add After:=ActiveSheet
+    ActiveSheet.Paste
+    
+    'mWS.Range("A1").Select
+    
+Done:
+    Exit Sub
+eh:
+    MsgBox Err.Source & ": The following error occured  " & Err.Description
+End Sub
+
+
+
+
+
